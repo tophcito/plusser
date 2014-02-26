@@ -1,0 +1,8 @@
+export(harvestPage)
+export(parsePost)
+export(setAPIkey)
+import(RCurl)
+import(RJSONIO)
+import(knitr)
+import(lubridate)
+importFrom(plyr,ldply)

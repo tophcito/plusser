@@ -1,0 +1,12 @@
+bibentry("Manual",
+   title = "plusser: A Google+ Interface for R",
+   author = person("Christoph", "Waldhauser"),
+   organization = "KDSS K Data Science Solutions",
+   address      = "Vienna, Austria",
+   year   = version$year,
+   url    = "http://kdss.at/",
+   mheader = "To cite plusser in publications use:",
+   mfooter = 
+     paste("We have invested a lot of time and effort in creating plusser,",
+      "please cite it when using it for data retrieval.", sep = " ")
+)
