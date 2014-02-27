@@ -25,12 +25,16 @@
 ##' \dontrun{
 ##' searchProfile("cats")
 ##' }
-searchProfile <- function(q, language="en", results=1, nextToken=NULL, cr=1) {
+searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
+  if (is.null(language)) {
+    languageString <- NULL
+  } else {
+    languageString <- paste0("&language=", language)
+  }
   this.url <- paste0(base.url,
                      "people?query=",
                      curlEscape(q),
-                     "&language=",
-                     language,
+                     languageString,
                      "&maxResults=50",
                      nextToken,
                      "&key=",
