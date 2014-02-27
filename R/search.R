@@ -3,14 +3,20 @@
 ##' This function uses the Google+ API to search for a text string in profiles. 
 ##' Optionally, profiles can be restricted to a certain language.
 ##' 
+##' The number of rows of the data frame returned  is somewhat ambigious.
+##' Specifying the \code{results} argument will try to get that many results.
+##' But there may be less (because Google could not find more) or more (because
+##' Google is organizing results on pages and it would be a waste to discard
+##' them automatically). If you really depend on getting not more rows than you
+##' expected, use standard selection (i.e. \code{[}) to trim the results.
+##' 
 ##' @param q The query string to search.
 ##' @param language A language code. See 
 ##'   \url{https://developers.google.com/+/api/search#available-languages}.
-##' @param maxPages Google fits 50 results on each page. This parameter 
-##'   specifies how many pages to retrieve at most. By default, only the first
-##'   page is being retrieved.
-##' @param nextToken,page used internally to retrieve additional pages of 
-##'   answers from the Google+ API. Users won't need to set this argument.
+##' @param results The approximate number of results that will be retrieved from
+##'   Google+.
+##' @param nextToken,cr used internally to retrieve additional pages of answers
+##'   from the Google+ API. Users won't need to set this argument.
 ##' @return a data frame with the user ID and display names of the profiles that
 ##'   met the search criteria.
 ##' @export
@@ -18,7 +24,7 @@
 ##' \dontrun{
 ##' searchProfile("cats")
 ##' }
-searchProfile <- function(q, language="en", maxPages=1, nextToken=NULL, page=1) {
+searchProfile <- function(q, language="en", results=1, nextToken=NULL, cr=1) {
   this.url <- paste0(base.url,
                      "people?query=",
                      q,
@@ -31,10 +37,11 @@ searchProfile <- function(q, language="en", maxPages=1, nextToken=NULL, page=1) 
   
   this.res <- fromJSON(getURL(this.url), asText=TRUE)
   this.ppl <- t(sapply(this.res[["items"]], function(x) data.frame(id=x$id, dn=x$displayName, stringsAsFactors=FALSE)))
-  if (!is.null(this.res[["nextPageToken"]]) & page < maxPages) {
+  cr <- cr + nrow(this.ppl)
+  if (!is.null(this.res[["nextPageToken"]]) & cr < results) {
     this.nextToken <- paste0("&pageToken=", this.res[["nextPageToken"]])
     this.ppl <- rbind(this.ppl,
-                  searchProfile(q, language, maxPages, this.nextToken, page+1))
+                  searchProfile(q, language, results, this.nextToken, cr))
   }
   return(this.ppl)
 }
@@ -64,7 +71,7 @@ searchProfile <- function(q, language="en", maxPages=1, nextToken=NULL, page=1) 
 ##' @param language A language code. See 
 ##'   \url{https://developers.google.com/+/api/search#available-languages}.
 ##' @param results The approximate number of results that will be retrieved from
-##'   Google+
+##'   Google+.
 ##' @param nextToken,cr used internally to retrieve additional pages of answers 
 ##'   from the Google+ API. Users won't need to set this argument.
 ##' @return The function returns a list or a data frame containing all available
@@ -95,7 +102,7 @@ searchPost <- function(q, ret="data.frame", language=NULL, results=1, nextToken=
   cr <- cr + length(res)
   if(!is.null(this.res[["nextPageToken"]]) & cr < results) {
     this.nextToken <- paste0("&pageToken=", this.res[["nextPageToken"]])
-    res <- c(res, searchPost(q, ret="list", language, results, this.nextToken, cr+length(res)))
+    res <- c(res, searchPost(q, ret="list", language, results, this.nextToken, cr))
   }
   if (ret=="list") {
     return(res)
