@@ -11,6 +11,11 @@
 ##' @param ret A string specifying the kind of return value. Either a 
 ##'   \code{list} of the rerieved items on the page, or that list parsed into a 
 ##'   \code{data.frame}.
+##' @param maxPages Google fits 100 results on each age. This parameter specifies how many
+##'   pages to retrieve at most. By default, only the first page is being
+##'   retrieved.
+##' @param nextToken,page used internally to retrieve additional pages of
+##'   answers from the Google+ API. Users won't need to set these arguments.
 ##' @return The function returns a list or a data frame. See \code{Details} for
 ##'   more on its content.
 ##' @export
@@ -19,17 +24,22 @@
 ##' \dontrun{
 ##' myPosts.df <- harvestPage("115046504166916768425")
 ##' }
-harvestPage <- function(user, ret="data.frame") {
+harvestPage <- function(user, ret="data.frame", maxPages=1, nextToken=NULL, page=1) {
   url <- paste0(base.url,
                 start.people,
                 user,
                 close.page,
                .gpapikey)
-  res <- fromJSON(getURL(url), asText=TRUE)
+  this.res <- fromJSON(getURL(url), asText=TRUE)
+  res <- this.res[["items"]]
+  if(!is.null(this.res[["nextPageToken"]]) & page < maxPages) {
+    this.nextToken <- paste0("&pageToken=", this.res[["nextPageToken"]])
+    res <- c(res, harvestPage(user, "list", maxPages, this.nextToken, page+1))
+  }
   if (ret=="list") {
-    return(res[["items"]])
+    return(res)
   } else {
-    res <- ldply(res[["items"]], parsePost)
+    res <- ldply(res, parsePost)
     return(res)
   }
 }
