@@ -2,7 +2,7 @@
 \alias{searchProfile}
 \title{Searching in Google+ Profiles}
 \usage{
-searchProfile(q, language = "en", results = 1, nextToken = NULL, cr = 1)
+searchProfile(q, language = NULL, results = 1, nextToken = NULL, cr = 1)
 }
 \arguments{
   \item{q}{The query string to search. The string is URL
