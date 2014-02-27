@@ -5,7 +5,8 @@
 searchProfile(q, language = "en", results = 1, nextToken = NULL, cr = 1)
 }
 \arguments{
-  \item{q}{The query string to search.}
+  \item{q}{The query string to search. The string is URL
+  encoded automatically.}
 
   \item{language}{A language code. See
   \url{https://developers.google.com/+/api/search#available-languages}.}

@@ -10,7 +10,8 @@
 ##' them automatically). If you really depend on getting not more rows than you
 ##' expected, use standard selection (i.e. \code{[}) to trim the results.
 ##' 
-##' @param q The query string to search.
+##' @param q The query string to search. The string is URL encoded
+##'   automatically.
 ##' @param language A language code. See 
 ##'   \url{https://developers.google.com/+/api/search#available-languages}.
 ##' @param results The approximate number of results that will be retrieved from
@@ -27,7 +28,7 @@
 searchProfile <- function(q, language="en", results=1, nextToken=NULL, cr=1) {
   this.url <- paste0(base.url,
                      "people?query=",
-                     q,
+                     curlEscape(q),
                      "&language=",
                      language,
                      "&maxResults=50",
@@ -64,7 +65,8 @@ searchProfile <- function(q, language="en", results=1, nextToken=NULL, cr=1) {
 ##' than you expected, use standard selection (i.e. \code{[}) to trim the
 ##' results.
 ##' 
-##' @param q The query string to search.
+##' @param q The query string to search. The string is URL encoded
+##'   automatically.
 ##' @param ret A string specifying the kind of return value. Either a 
 ##'   \code{list} of the rerieved items on the page, or that list parsed into a 
 ##'   \code{data.frame}.
@@ -83,7 +85,6 @@ searchProfile <- function(q, language="en", results=1, nextToken=NULL, cr=1) {
 ##' searchPost("#cats")
 ##' }
 searchPost <- function(q, ret="data.frame", language=NULL, results=1, nextToken=NULL, cr=0) {
-  q <- curlEscape(q)
   if (is.null(language)) {
     languageString <- NULL
   } else {
@@ -91,7 +92,7 @@ searchPost <- function(q, ret="data.frame", language=NULL, results=1, nextToken=
   }
   url <- paste0(base.url,
                 "activities?query=",
-                q,
+                curlEscape(q),
                 languageString,
                 "&maxResults=20",
                 nextToken,

@@ -12,6 +12,9 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c(".gpapikey")) ##to make 
 ##' @examples
 ##' setAPIkey("thisIsInvalid")
 setAPIkey <- function(apikey) {
+  apikey.enc <- curlEscape(apikey)
+  if (apikey.enc != apikey) 
+    warning("Your API key has been URL encoded. This should not be neccessary. Check if you used the right key.")
   assign(".gpapikey", apikey, envir=.GlobalEnv)
   return(isTRUE(all.equal(.gpapikey,apikey)))
 }
