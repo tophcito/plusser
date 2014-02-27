@@ -1,23 +1,23 @@
-##' Retrieve the posts of a user's G+ page.
+##' Retrieve the posts of a user's G+ page
 ##' 
 ##' This function retrieves up to the 100 last posts that a user put on her 
-##' page.
+##' page. Google calls this `listing activities`.
 ##' 
 ##' The result is either a simple list of items from the page that can be parsed
-##' using \code{\link{parsePost}} or a data frame with that function allready 
+##' using \code{\link{parsePost}} or a data frame with that function already
 ##' applied.
 ##' 
 ##' The length of the list or the number of rows of the data frame are somewhat 
-##' ambigious. Specifying the \code{results} argument will try to get that many 
+##' ambiguous. Specifying the \code{results} argument will try to get that many
 ##' results. But there may be less (because Google could not find more) or more 
 ##' (because Google is organizing results on pages and it would be a waste to 
 ##' discard them automatically). If you really depend on getting not more rows 
 ##' than you expected, use standard selection (i.e. \code{[}) to trim the
 ##' results.
 ##' 
-##' @param user The UID of a user.
+##' @param user A user identification string: either user ID or +Name.
 ##' @param ret A string specifying the kind of return value. Either a 
-##'   \code{list} of the rerieved items on the page, or that list parsed into a 
+##'   \code{list} of the retrieved items on the page, or that list parsed into a
 ##'   \code{data.frame}.
 ##' @param results The approximate number of results that will be retrieved from
 ##'   Google+.
@@ -26,6 +26,8 @@
 ##' @return The function returns a list or a data frame. See \code{Details} for
 ##'   more on its content.
 ##' @export
+##' @seealso Google+ API documentation:
+##'   \url{https://developers.google.com/+/api/latest/activities/list}.
 #' @importFrom plyr ldply
 ##' @examples
 ##' \dontrun{
@@ -56,13 +58,16 @@ harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1)
 ##' Retrieve the users that acted on a G+ post
 ##'
 ##' This function retrieves the users that either +1ed or reshared a post.
+##' Google calls this `list by activity`.
 ##'
-##' @param activity the post ID for which the users should be retrieved.
-##' @param kind denoting the kind of person to be retrieved. Either
+##' @param activity The post ID for which the users should be retrieved.
+##' @param kind Denoting the kind of person to be retrieved. Either
 ##'   \code{plusoners} or \code{resharers}.
-##' @param nextToken used internally to retrieve additional pages of answers
-##'   from the Google+ API. Users won't need to set this argument.
+##' @param nextToken This is used internally to retrieve additional pages of
+##'   answers from the Google+ API. Users won't need to set this argument.
 ##' @return Returns a (character) vector of Google+ user IDs.
+##' @seealso Google+ API documentation:
+##'   \url{https://developers.google.com/+/api/latest/people/listByActivity}.
 ##' @export
 harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
                             nextToken=NULL) {
@@ -88,10 +93,10 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 
 ##' Retrieve the profile of a Google+ user
 ##'
-##' This function retrieves the profile of a Google+ user. The results are
-##' returned in a data frame. See \code{Details}.
+##' This function retrieves the profile of a Google+ user. Google calls this
+##' `get people`. The results are returned in a data frame. See \code{Details}.
 ##'
-##' The following fields will be filled with data (if available) and \code{NA}
+##' The following fields will be filled with data (if available) or \code{NA}
 ##' otherwise:
 ##' \describe{
 ##'   \item{\code{id}}{The Google+ user ID.}
@@ -101,9 +106,9 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##'   \item{\code{fn}}{The user's first name.}
 ##'   \item{\code{verified}}{Logical. \code{TRUE} if it is a verified Google+ 
 ##'                          profile.}
-##'   \item{\code{ageMin, ageMax}}{Google+ provides only age ranges. This will
-##'                                contain the lower and upper bound of the age
-##'                                range of the user.}
+##'   \item{\code{ageMin, ageMax}}{Google+ provides only age ranges for some
+##'                                profiles. This will contain the lower and
+##'                               upper bound of the age range of the user.}
 ##'   \item{\code{bday}}{The birthday of the user (YYYY-MM-DD).}
 ##'   \item{\code{nCircled}}{The number of Persons the user circled by.}
 ##'   \item{\code{currentLoc}}{The user's current location.}
@@ -115,12 +120,14 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##'   \item{\code{type}}{The type of a profile: \code{person} or \code{page}.}
 ##'   \item{\code{brag}}{The `bragging rights' section of the profile.}
 ##'   \item{\code{occ}}{The person's occupation.}
-##'   \item{\code{skills}}{Ther person's skills.}
+##'   \item{\code{skills}}{The person's skills.}
 ##'   }
 ##'
 ##'   @param id the Google+ user ID.
 ##'   @return The function returns a 1-row data frame with all available
 ##'           information. See \code{Details} for a description of its columns.
+##'   @seealso Google+ API documentation:
+##'     \url{https://developers.google.com/+/api/latest/people/get}
 ##'   @export
 harvestProfile <- function(id) {
   this.url <- paste0(base.url,

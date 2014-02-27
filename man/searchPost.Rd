@@ -10,7 +10,7 @@ searchPost(q, ret = "data.frame", language = NULL, results = 1,
   encoded automatically.}
 
   \item{ret}{A string specifying the kind of return value.
-  Either a \code{list} of the rerieved items on the page,
+  Either a \code{list} of the retrieved items on the page,
   or that list parsed into a \code{data.frame}.}
 
   \item{language}{A language code. See
@@ -36,10 +36,10 @@ restricted to a certain language.
 \details{
 The result is either a simple list of items from the page
 that can be parsed using \code{\link{parsePost}} or a data
-frame with that function allready applied.
+frame with that function already applied.
 
 The length of the list or the number of rows of the data
-frame are somewhat ambigious. Specifying the \code{results}
+frame are somewhat ambiguous. Specifying the \code{results}
 argument will try to get that many results. But there may
 be less (because Google could not find more) or more
 (because Google is organizing results on pages and it would
@@ -51,5 +51,9 @@ standard selection (i.e. \code{[}) to trim the results.
 \dontrun{
 searchPost("#cats")
 }
+}
+\seealso{
+Google+ API documentation:
+\url{https://developers.google.com/+/api/latest/activities/search}.
 }
 

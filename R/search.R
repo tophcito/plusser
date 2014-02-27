@@ -3,7 +3,7 @@
 ##' This function uses the Google+ API to search for a text string in profiles. 
 ##' Optionally, profiles can be restricted to a certain language.
 ##' 
-##' The number of rows of the data frame returned  is somewhat ambigious.
+##' The number of rows of the data frame returned is somewhat ambiguous.
 ##' Specifying the \code{results} argument will try to get that many results.
 ##' But there may be less (because Google could not find more) or more (because
 ##' Google is organizing results on pages and it would be a waste to discard
@@ -16,11 +16,13 @@
 ##'   \url{https://developers.google.com/+/api/search#available-languages}.
 ##' @param results The approximate number of results that will be retrieved from
 ##'   Google+.
-##' @param nextToken,cr used internally to retrieve additional pages of answers
-##'   from the Google+ API. Users won't need to set this argument.
-##' @return a data frame with the user ID and display names of the profiles that
+##' @param nextToken,cr These are used internally to retrieve additional pages
+##'   of answers from the Google+ API. Users won't need to set these arguments.
+##' @return A data frame with the user ID and display names of the profiles that
 ##'   met the search criteria.
 ##' @export
+##' @seealso Google+ API documentation:
+##'   \url{https://developers.google.com/+/api/latest/people/search}.
 ##' @examples
 ##' \dontrun{
 ##' searchProfile("cats")
@@ -58,11 +60,11 @@ searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
 ##' Optionally, search results can be restricted to a certain language.
 ##' 
 ##' The result is either a simple list of items from the page that can be parsed
-##' using \code{\link{parsePost}} or a data frame with that function allready 
+##' using \code{\link{parsePost}} or a data frame with that function already
 ##' applied.
 ##' 
 ##' The length of the list or the number of rows of the data frame are somewhat 
-##' ambigious. Specifying the \code{results} argument will try to get that many 
+##' ambiguous. Specifying the \code{results} argument will try to get that many
 ##' results. But there may be less (because Google could not find more) or more 
 ##' (because Google is organizing results on pages and it would be a waste to 
 ##' discard them automatically). If you really depend on getting not more rows 
@@ -72,7 +74,7 @@ searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
 ##' @param q The query string to search. The string is URL encoded
 ##'   automatically.
 ##' @param ret A string specifying the kind of return value. Either a 
-##'   \code{list} of the rerieved items on the page, or that list parsed into a 
+##'   \code{list} of the retrieved items on the page, or that list parsed into a
 ##'   \code{data.frame}.
 ##' @param language A language code. See 
 ##'   \url{https://developers.google.com/+/api/search#available-languages}.
@@ -84,6 +86,8 @@ searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
 ##'   data on the posts that met the search criteria. See \code{Details} for 
 ##'   more on its content.
 ##' @export
+##' @seealso Google+ API documentation:
+##'   \url{https://developers.google.com/+/api/latest/activities/search}.
 ##' @examples
 ##' \dontrun{
 ##' searchPost("#cats")

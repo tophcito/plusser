@@ -1,3 +1,5 @@
+### Hard-coded Google+ API URLs
+
 base.url <- "https://www.googleapis.com/plus/v1/"
 
 start.people <- "people/"
