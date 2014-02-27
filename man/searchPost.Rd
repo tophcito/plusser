@@ -16,7 +16,7 @@ searchPost(q, ret = "data.frame", language = NULL, results = 1,
   \url{https://developers.google.com/+/api/search#available-languages}.}
 
   \item{results}{The approximate number of results that
-  will be retrieved from Google+}
+  will be retrieved from Google+.}
 
   \item{nextToken,cr}{used internally to retrieve
   additional pages of answers from the Google+ API. Users

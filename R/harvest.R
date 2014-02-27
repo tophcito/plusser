@@ -7,14 +7,21 @@
 ##' using \code{\link{parsePost}} or a data frame with that function allready 
 ##' applied.
 ##' 
+##' The length of the list or the number of rows of the data frame are somewhat 
+##' ambigious. Specifying the \code{results} argument will try to get that many 
+##' results. But there may be less (because Google could not find more) or more 
+##' (because Google is organizing results on pages and it would be a waste to 
+##' discard them automatically). If you really depend on getting not more rows 
+##' than you expected, use standard selection (i.e. \code{[}) to trim the
+##' results.
+##' 
 ##' @param user The UID of a user.
 ##' @param ret A string specifying the kind of return value. Either a 
 ##'   \code{list} of the rerieved items on the page, or that list parsed into a 
 ##'   \code{data.frame}.
-##' @param maxPages Google fits 100 results on each age. This parameter specifies how many
-##'   pages to retrieve at most. By default, only the first page is being
-##'   retrieved.
-##' @param nextToken,page used internally to retrieve additional pages of
+##' @param results The approximate number of results that will be retrieved from
+##'   Google+.
+##' @param nextToken,cr used internally to retrieve additional pages of
 ##'   answers from the Google+ API. Users won't need to set these arguments.
 ##' @return The function returns a list or a data frame. See \code{Details} for
 ##'   more on its content.
@@ -24,7 +31,7 @@
 ##' \dontrun{
 ##' myPosts.df <- harvestPage("115046504166916768425")
 ##' }
-harvestPage <- function(user, ret="data.frame", maxPages=1, nextToken=NULL, page=1) {
+harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1) {
   url <- paste0(base.url,
                 start.people,
                 user,
@@ -32,9 +39,10 @@ harvestPage <- function(user, ret="data.frame", maxPages=1, nextToken=NULL, page
                .gpapikey)
   this.res <- fromJSON(getURL(url), asText=TRUE)
   res <- this.res[["items"]]
-  if(!is.null(this.res[["nextPageToken"]]) & page < maxPages) {
+  cr <- cr + length(res)
+  if(!is.null(this.res[["nextPageToken"]]) & cr < results) {
     this.nextToken <- paste0("&pageToken=", this.res[["nextPageToken"]])
-    res <- c(res, harvestPage(user, "list", maxPages, this.nextToken, page+1))
+    res <- c(res, harvestPage(user, "list", results, this.nextToken, cr))
   }
   if (ret=="list") {
     return(res)

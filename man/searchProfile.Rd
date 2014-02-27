@@ -2,8 +2,7 @@
 \alias{searchProfile}
 \title{Searching in Google+ Profiles}
 \usage{
-searchProfile(q, language = "en", maxPages = 1, nextToken = NULL,
-  page = 1)
+searchProfile(q, language = "en", results = 1, nextToken = NULL, cr = 1)
 }
 \arguments{
   \item{q}{The query string to search.}
@@ -11,11 +10,10 @@ searchProfile(q, language = "en", maxPages = 1, nextToken = NULL,
   \item{language}{A language code. See
   \url{https://developers.google.com/+/api/search#available-languages}.}
 
-  \item{maxPages}{Google fits 50 results on each page. This
-  parameter specifies how many pages to retrieve at most.
-  By default, only the first page is being retrieved.}
+  \item{results}{The approximate number of results that
+  will be retrieved from Google+.}
 
-  \item{nextToken,page}{used internally to retrieve
+  \item{nextToken,cr}{used internally to retrieve
   additional pages of answers from the Google+ API. Users
   won't need to set this argument.}
 }
@@ -27,6 +25,16 @@ profiles that met the search criteria.
 This function uses the Google+ API to search for a text
 string in profiles. Optionally, profiles can be restricted
 to a certain language.
+}
+\details{
+The number of rows of the data frame returned is somewhat
+ambigious. Specifying the \code{results} argument will try
+to get that many results. But there may be less (because
+Google could not find more) or more (because Google is
+organizing results on pages and it would be a waste to
+discard them automatically). If you really depend on
+getting not more rows than you expected, use standard
+selection (i.e. \code{[}) to trim the results.
 }
 \examples{
 \dontrun{
