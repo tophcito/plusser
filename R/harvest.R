@@ -34,7 +34,7 @@
 harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1) {
   url <- paste0(base.url,
                 start.people,
-                user,
+                curlEscape(user),
                 close.page,
                .gpapikey)
   this.res <- fromJSON(getURL(url), asText=TRUE)
@@ -67,7 +67,7 @@ harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1)
 harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
                             nextToken=NULL) {
   this.url <- paste0(base.url, "activities/",
-                     activity,
+                     curlEscape(activity),
                      "/",
                      start.people,
                      kind,
@@ -125,7 +125,7 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 harvestProfile <- function(id) {
   this.url <- paste0(base.url,
                      start.people,
-                     id,
+                     curlEscape(id),
                      close.people,
                      .gpapikey)
   this.res <- fromJSON(getURL(this.url), asText=TRUE)

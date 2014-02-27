@@ -6,7 +6,8 @@ searchPost(q, ret = "data.frame", language = NULL, results = 1,
   nextToken = NULL, cr = 0)
 }
 \arguments{
-  \item{q}{The query string to search.}
+  \item{q}{The query string to search. The string is URL
+  encoded automatically.}
 
   \item{ret}{A string specifying the kind of return value.
   Either a \code{list} of the rerieved items on the page,
