@@ -21,8 +21,9 @@
 ##' }
 harvestPage <- function(user, ret="data.frame") {
   url <- paste0(base.url,
-               user,
-               page.string,
+                start.people,
+                user,
+                close.page,
                .gpapikey)
   res <- fromJSON(getURL(url), asText=TRUE)
   if (ret=="list") {
