@@ -1,4 +1,6 @@
+export(harvestActivity)
 export(harvestPage)
+export(harvestProfile)
 export(parsePost)
 export(setAPIkey)
 import(RCurl)
