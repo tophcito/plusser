@@ -14,6 +14,7 @@
 ##' @return The function returns a list or a data frame. See \code{Details} for
 ##'   more on its content.
 ##' @export
+#' @importFrom plyr ldply
 ##' @examples
 ##' \dontrun{
 ##' myPosts.df <- harvestPage("115046504166916768425")

@@ -14,7 +14,6 @@
 #' }
 #' 
 #' @import knitr RCurl RJSONIO lubridate
-#' @importFrom plyr ldply
 #' @name plusser
 #' @docType package
 NULL
