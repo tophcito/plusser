@@ -42,6 +42,11 @@ number of Persons the user circled by.}
 section of the profile.} \item{\code{occ}}{The person's
 occupation.} \item{\code{skills}}{The person's skills.} }
 }
+\examples{
+\dontrun{
+gProfile <- harvestProfile("+google")
+}
+}
 \seealso{
 Google+ API documentation:
 \url{https://developers.google.com/+/api/latest/people/get}

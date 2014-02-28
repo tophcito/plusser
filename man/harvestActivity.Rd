@@ -23,6 +23,12 @@ Returns a (character) vector of Google+ user IDs.
 This function retrieves the users that either +1ed or
 reshared a post. Google calls this `list by activity`.
 }
+\examples{
+\dontrun{
+## User IDs of people that +1ed this post
+users.p <- harvestActivity("z131ihvycs30ivrxm04cjbiwjkbqujka0sk0k", "plusoners")
+}
+}
 \seealso{
 Google+ API documentation:
 \url{https://developers.google.com/+/api/latest/people/listByActivity}.

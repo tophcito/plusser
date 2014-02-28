@@ -25,9 +25,8 @@ The function returns a list or a data frame. See
 \code{Details} for more on its content.
 }
 \description{
-This function retrieves up to the 100 last posts that a
-user put on her page. Google calls this `listing
-activities`.
+This function retrieves the most recent posts that a user
+put on her page. Google calls this `listing activities`.
 }
 \details{
 The result is either a simple list of items from the page
@@ -46,6 +45,7 @@ standard selection (i.e. \code{[}) to trim the results.
 \examples{
 \dontrun{
 myPosts.df <- harvestPage("115046504166916768425")
+gPosts.df <- harvestPage("+google", results=200)
 }
 }
 \seealso{

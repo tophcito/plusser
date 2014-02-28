@@ -1,6 +1,6 @@
 ##' Retrieve the posts of a user's G+ page
 ##' 
-##' This function retrieves up to the 100 last posts that a user put on her 
+##' This function retrieves the most recent posts that a user put on her 
 ##' page. Google calls this `listing activities`.
 ##' 
 ##' The result is either a simple list of items from the page that can be parsed
@@ -32,6 +32,7 @@
 ##' @examples
 ##' \dontrun{
 ##' myPosts.df <- harvestPage("115046504166916768425")
+##' gPosts.df <- harvestPage("+google", results=200)
 ##' }
 harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1) {
   url <- paste0(base.url,
@@ -69,6 +70,11 @@ harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1)
 ##' @seealso Google+ API documentation:
 ##'   \url{https://developers.google.com/+/api/latest/people/listByActivity}.
 ##' @export
+##' @examples
+##' \dontrun{
+##' ## User IDs of people that +1ed this post
+##' users.p <- harvestActivity("z131ihvycs30ivrxm04cjbiwjkbqujka0sk0k", "plusoners")
+##' }
 harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
                             nextToken=NULL) {
   this.url <- paste0(base.url, "activities/",
@@ -123,12 +129,16 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##'   \item{\code{skills}}{The person's skills.}
 ##'   }
 ##'
-##'   @param id the Google+ user ID.
-##'   @return The function returns a 1-row data frame with all available
-##'           information. See \code{Details} for a description of its columns.
-##'   @seealso Google+ API documentation:
-##'     \url{https://developers.google.com/+/api/latest/people/get}
-##'   @export
+##' @param id the Google+ user ID.
+##' @return The function returns a 1-row data frame with all available 
+##'   information. See \code{Details} for a description of its columns.
+##' @seealso Google+ API documentation:
+##'   \url{https://developers.google.com/+/api/latest/people/get}
+##' @export
+##' @examples
+##' \dontrun{
+##' gProfile <- harvestProfile("+google")
+##' }
 harvestProfile <- function(id) {
   this.url <- paste0(base.url,
                      start.people,
