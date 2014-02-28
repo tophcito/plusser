@@ -1,32 +1,37 @@
-\name{harvestPage}
-\alias{harvestPage}
-\title{Retrieve the posts of a user's G+ page}
+\name{searchPost}
+\alias{searchPost}
+\title{Searching for Google+ Posts}
 \usage{
-harvestPage(user, ret = "data.frame", results = 1, nextToken = NULL,
-  cr = 1)
+searchPost(q, ret = "data.frame", language = NULL, results = 1,
+  nextToken = NULL, cr = 0)
 }
 \arguments{
-  \item{user}{A user identification string: either user ID
-  or +Name.}
+  \item{q}{The query string to search. The string is URL
+  encoded automatically.}
 
   \item{ret}{A string specifying the kind of return value.
   Either a \code{list} of the retrieved items on the page,
   or that list parsed into a \code{data.frame}.}
+
+  \item{language}{A language code. See
+  \url{https://developers.google.com/+/api/search#available-languages}.}
 
   \item{results}{The approximate number of results that
   will be retrieved from Google+.}
 
   \item{nextToken,cr}{used internally to retrieve
   additional pages of answers from the Google+ API. Users
-  won't need to set these arguments.}
+  won't need to set this argument.}
 }
 \value{
-The function returns a list or a data frame. See
-\code{Details} for more on its content.
+The function returns a list or a data frame containing all
+available data on the posts that met the search criteria.
+See \code{Details} for more on its content.
 }
 \description{
-This function retrieves the most recent posts that a user
-put on her page. Google calls this `listing activities`.
+This function uses the Google+ API to search for a text
+string in posts. Optionally, search results can be
+restricted to a certain language.
 }
 \details{
 The result is either a simple list of items from the page
@@ -44,12 +49,11 @@ standard selection (i.e. \code{[}) to trim the results.
 }
 \examples{
 \dontrun{
-myPosts.df <- harvestPage("115046504166916768425")
-gPosts.df <- harvestPage("+google", results=200)
+searchPost("#cats")
 }
 }
 \seealso{
 Google+ API documentation:
-\url{https://developers.google.com/+/api/latest/activities/list}.
+\url{https://developers.google.com/+/api/latest/activities/search}.
 }
 
