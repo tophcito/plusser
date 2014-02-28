@@ -1,3 +1,20 @@
+Changes in version 0.2-0 (2014-02-28)
+
+New Features
+* Gained two functions to harvest user profiles and user IDs of users acting on
+  a post.
+* Gained a function to search profiles for query strings.
+* Gained a function to search for a query in posts.
+
+
+Documentation
+* More elaborate package documentation.
+* Every function now contains at least on example.
+
+Improvements
+* Retrieval of paginated results oriented on target values.
+* All user supplied strings are now URL encoded (escaped).
+
 Changes in version 0.1-0 (2014-02-26)
 
 * Initial rudimentary package version.
