@@ -1,21 +1,21 @@
 \name{harvestProfile}
 \alias{harvestProfile}
-\title{Retrieve the profile of a Google+ user}
+\title{Retrieve the profile of Google+ users}
 \usage{
 harvestProfile(id)
 }
 \arguments{
-  \item{id}{the Google+ user ID.}
+  \item{id}{A character vector of the Google+ user ID(s).}
 }
 \value{
-The function returns a 1-row data frame with all available
-information. See \code{Details} for a description of its
-columns.
+The function returns a data frame with all available
+information with one row per user ID. See \code{Details}
+for a description of its columns.
 }
 \description{
-This function retrieves the profile of a Google+ user.
-Google calls this `get people`. The results are returned in
-a data frame. See \code{Details}.
+This function retrieves the profile of one or more Google+
+user(s). Google calls this `get people`. The results are
+returned in a data frame. See \code{Details}.
 }
 \details{
 The following fields will be filled with data (if
