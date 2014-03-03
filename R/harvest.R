@@ -35,6 +35,9 @@
 ##' gPosts.df <- harvestPage("+google", results=200)
 ##' }
 harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1) {
+  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
+  if (results < 1) stop("Argument 'results' needs be positive.")
+  if (ret != "data.frame" & ret != "list") stop("Argument 'ret' must be either 'data.frame' or 'list'")
   url <- paste0(base.url,
                 start.people,
                 curlEscape(user),
@@ -77,6 +80,8 @@ harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1)
 ##' }
 harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
                             nextToken=NULL) {
+  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
+  if (kind != "plusoners" & kind != "resharers") stop("Argument 'kind' needs to be either 'plusoners' or 'resharers'.")
   this.url <- paste0(base.url, "activities/",
                      curlEscape(activity),
                      "/",
@@ -142,6 +147,7 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##' gProfile <- harvestProfile("+google")
 ##' }
 harvestProfile <- function(id) {
+  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
   if (length(id)>1) {
     res <- ldply(as.list(id), harvestProfile)
     return(res)
