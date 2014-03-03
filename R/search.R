@@ -28,6 +28,7 @@
 ##' searchProfile("cats")
 ##' }
 searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
+  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
   if (is.null(language)) {
     languageString <- NULL
   } else {
@@ -93,6 +94,7 @@ searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
 ##' searchPost("#cats")
 ##' }
 searchPost <- function(q, ret="data.frame", language=NULL, results=1, nextToken=NULL, cr=0) {
+  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
   if (is.null(language)) {
     languageString <- NULL
   } else {

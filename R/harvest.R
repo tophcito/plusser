@@ -35,6 +35,9 @@
 ##' gPosts.df <- harvestPage("+google", results=200)
 ##' }
 harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1) {
+  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
+  if (results < 1) stop("Argument 'results' needs be positive.")
+  if (ret != "data.frame" & ret != "list") stop("Argument 'ret' must be either 'data.frame' or 'list'")
   url <- paste0(base.url,
                 start.people,
                 curlEscape(user),
@@ -77,6 +80,8 @@ harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1)
 ##' }
 harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
                             nextToken=NULL) {
+  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
+  if (kind != "plusoners" & kind != "resharers") stop("Argument 'kind' needs to be either 'plusoners' or 'resharers'.")
   this.url <- paste0(base.url, "activities/",
                      curlEscape(activity),
                      "/",
@@ -97,10 +102,11 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 }
 
 
-##' Retrieve the profile of a Google+ user
+##' Retrieve the profile of Google+ users
 ##'
-##' This function retrieves the profile of a Google+ user. Google calls this
-##' `get people`. The results are returned in a data frame. See \code{Details}.
+##' This function retrieves the profile of one or more Google+ user(s). Google
+##' calls this `get people`. The results are returned in a data frame. See 
+##' \code{Details}.
 ##'
 ##' The following fields will be filled with data (if available) or \code{NA}
 ##' otherwise:
@@ -129,9 +135,10 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##'   \item{\code{skills}}{The person's skills.}
 ##'   }
 ##'
-##' @param id the Google+ user ID.
-##' @return The function returns a 1-row data frame with all available 
-##'   information. See \code{Details} for a description of its columns.
+##' @param id A character vector of the Google+ user ID(s).
+##' @return The function returns a data frame with all available 
+##'   information with one row per user ID. See \code{Details} for a description
+##'   of its columns.
 ##' @seealso Google+ API documentation:
 ##'   \url{https://developers.google.com/+/api/latest/people/get}
 ##' @export
@@ -140,6 +147,11 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##' gProfile <- harvestProfile("+google")
 ##' }
 harvestProfile <- function(id) {
+  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
+  if (length(id)>1) {
+    res <- ldply(as.list(id), harvestProfile)
+    return(res)
+  } else {
   this.url <- paste0(base.url,
                      start.people,
                      curlEscape(id),
@@ -166,7 +178,8 @@ harvestProfile <- function(id) {
                    occ=this.res$occupation,
                    skills=this.res$skills)
   this.ext[sapply(this.ext, is.null)] <- NA
-  this.ext <- as.data.frame(this.ext)
+  this.ext <- as.data.frame(this.ext, stringsAsFactors=FALSE)
   rownames(this.ext) <- NULL
   return(this.ext)
+  }
 }
