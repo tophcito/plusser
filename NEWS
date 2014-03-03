@@ -1,3 +1,11 @@
+Changes in version 0.3-0 (2014-03-03)
+
+Improvements
+* harvestProfile is now vectorized, accepting a vector of user IDs.
+* All functions that depend on it now fail gracefully if no API key has been 
+  set.
+* Functions now use a basic heuristic in validating their respective arguments.
+
 Changes in version 0.2-0 (2014-02-28)
 
 New Features
