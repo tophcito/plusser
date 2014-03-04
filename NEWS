@@ -1,3 +1,10 @@
+Changes in version 0.3-1 (2014-03-04)
+
+Bugfixes
+* The age of a post (as returned by 'parsePost') is now always in days.
+  Previously, posts that were younger than a day had their age returned in
+  hours. This led to inconsistencies in the interpretation of age. 
+
 Changes in version 0.3-0 (2014-03-03)
 
 Improvements

@@ -7,7 +7,7 @@
 ##' \describe{
 ##'   \item{\code{ti}}{Date and time the post was published.}
 ##'   \item{\code{age}}{The age of the post as difference between now and
-##'                     \code{ti}.}
+##'                     \code{ti} in (floating point) days.}
 ##'   \item{\code{id}}{The post's unique Google+ post ID.}
 ##'   \item{\code{au}}{The post's author's Google+ user ID.}
 ##'   \item{\code{ve}}{The action describing the post.}
@@ -54,7 +54,7 @@ parsePost <- function(p) {
   nR <- p$object$resharers$totalItems
   nA <- length(p$object$attachments)
   df <- data.frame(ti=ti,
-                   age=as.numeric(now() - ti),
+                   age=as.numeric((now() - ti), units="days"),
                    id=id,
                    au=au,
                    ve=ve,
