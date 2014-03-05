@@ -1,3 +1,15 @@
+Changes in version 0.3-2 (2014-03-05)
+
+Improvements
+* Dropping the knitr dependency for now, as a vignette is unlikely to be
+  included due to authentication issues. 
+
+Bugfixes
+* The Google+ API key is now stored in a private environment instead of
+  .Globalenv. This is required to pass CRAN checks and safeguards against
+  overwriting userspace variables.
+
+
 Changes in version 0.3-1 (2014-03-04)
 
 Bugfixes

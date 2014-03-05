@@ -52,7 +52,7 @@
 #'   \item Use the resulting data frame as you see fit.
 #' }
 #' 
-#' @import knitr RCurl RJSONIO lubridate
+#' @import RCurl RJSONIO lubridate
 #' @name plusser
 #' @docType package
 NULL

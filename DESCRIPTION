@@ -1,6 +1,6 @@
 Package: plusser
 Date: 2014-02-28
-Version: 0.3-1
+Version: 0.3-2
 Title: A Google+ Interface for R
 Description: plusser provides an API interface to Google+ so that posts,
     profiles and pages can be automatically retrieved
@@ -9,8 +9,7 @@ Author: Christoph Waldhauser <chw@kdss.at>
 Authors@R: person("Christoph", "Waldhauser", email="chw@kdss.at", role=c("aut",
     "cre"))
 Depends:
-    R (>= 3.0.2),
-    knitr
+    R (>= 3.0.2)
 Imports:
     RCurl,
     RJSONIO,
@@ -18,4 +17,3 @@ Imports:
     plyr
 License: GPL-3 | file LICENSE
 LazyData: true
-VignetteBuilder: knitr

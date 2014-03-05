@@ -17,6 +17,6 @@ setAPIkey <- function(apikey) {
   apikey.enc <- curlEscape(apikey)
   if (apikey.enc != apikey) 
     warning("Your API key has been URL encoded. This should not be neccessary. Check if you used the right key.")
-  assign(".gpapikey", apikey, envir=.GlobalEnv)
-  return(isTRUE(all.equal(.gpapikey,apikey)))
+  assign("apikey", apikey, envir=gp)
+  return(isTRUE(all.equal(get("apikey", envir=gp),apikey)))
 }
