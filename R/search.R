@@ -28,7 +28,7 @@
 ##' searchProfile("cats")
 ##' }
 searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
-  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
+  if (is.null(get("apikey", envir=gp))) stop("Set the Google+ API key first using setAPIkey().")
   if (is.null(language)) {
     languageString <- NULL
   } else {
@@ -41,7 +41,7 @@ searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
                      "&maxResults=50",
                      nextToken,
                      "&key=",
-                     .gpapikey)
+                     get("apikey", envir=gp))
   
   this.res <- fromJSON(getURL(this.url), asText=TRUE)
   this.ppl <- t(sapply(this.res[["items"]], function(x) data.frame(id=x$id, dn=x$displayName, stringsAsFactors=FALSE)))
@@ -94,7 +94,7 @@ searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
 ##' searchPost("#cats")
 ##' }
 searchPost <- function(q, ret="data.frame", language=NULL, results=1, nextToken=NULL, cr=0) {
-  if (!exists(".gpapikey")) stop("Set the Google+ API key first using setAPIkey().")
+  if (is.null(get("apikey", envir=gp))) stop("Set the Google+ API key first using setAPIkey().")
   if (is.null(language)) {
     languageString <- NULL
   } else {
@@ -107,7 +107,7 @@ searchPost <- function(q, ret="data.frame", language=NULL, results=1, nextToken=
                 "&maxResults=20",
                 nextToken,
                 "&key=",
-                .gpapikey)
+                get("apikey", envir=gp))
   this.res <- fromJSON(getURL(url), asText=TRUE)
   res <- this.res[["items"]]
   cr <- cr + length(res)
