@@ -1,3 +1,15 @@
+Changes in version 0.3-3 (2014-03-14)
+
+Improvements
+* Harvesting profiles now returns also a profile's website (if it has one).
+* Searching for profiles now returns an additional column differentiating
+  between profiles and pages.
+
+Bugfixes
+* Some columns of the results when harvesting profiles were always NA because
+  the corresponding field had not been selected. All fields are now selected.
+* Also when harvesting profiles, type was always NA; this is now fixed.
+
 Changes in version 0.3-2 (2014-03-05)
 
 Improvements
