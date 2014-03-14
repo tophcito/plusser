@@ -25,7 +25,8 @@ available) or \code{NA} otherwise: \describe{
 \code{female}, or \code{other}.} \item{\code{ln}}{The
 user's last name.} \item{\code{fn}}{The user's first name.}
 \item{\code{verified}}{Logical. \code{TRUE} if it is a
-verified Google+ profile.} \item{\code{ageMin,
+verified Google+ profile.} \item{\code{website}}{A URL
+listed in the profile.} \item{\code{ageMin,
 ageMax}}{Google+ provides only age ranges for some
 profiles. This will contain the lower and upper bound of
 the age range of the user.} \item{\code{bday}}{The birthday

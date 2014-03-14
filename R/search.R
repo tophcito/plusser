@@ -18,7 +18,7 @@
 ##'   Google+.
 ##' @param nextToken,cr These are used internally to retrieve additional pages
 ##'   of answers from the Google+ API. Users won't need to set these arguments.
-##' @return A data frame with the user ID and display names of the profiles that
+##' @return A data frame with the user ID, display names and profile type of the profiles that
 ##'   met the search criteria.
 ##' @export
 ##' @seealso Google+ API documentation:
@@ -44,7 +44,7 @@ searchProfile <- function(q, language=NULL, results=1, nextToken=NULL, cr=1) {
                      get("apikey", envir=gp))
   
   this.res <- fromJSON(getURL(this.url), asText=TRUE)
-  this.ppl <- t(sapply(this.res[["items"]], function(x) data.frame(id=x$id, dn=x$displayName, stringsAsFactors=FALSE)))
+  this.ppl <- t(sapply(this.res[["items"]], function(x) data.frame(id=x$id, dn=x$displayName, ty=x$objectType, stringsAsFactors=FALSE)))
   cr <- cr + nrow(this.ppl)
   if (!is.null(this.res[["nextPageToken"]]) & cr < results) {
     this.nextToken <- paste0("&pageToken=", this.res[["nextPageToken"]])

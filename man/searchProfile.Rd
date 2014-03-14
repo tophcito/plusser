@@ -19,8 +19,8 @@ searchProfile(q, language = NULL, results = 1, nextToken = NULL, cr = 1)
   won't need to set these arguments.}
 }
 \value{
-A data frame with the user ID and display names of the
-profiles that met the search criteria.
+A data frame with the user ID, display names and profile
+type of the profiles that met the search criteria.
 }
 \description{
 This function uses the Google+ API to search for a text
