@@ -118,6 +118,7 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##'   \item{\code{fn}}{The user's first name.}
 ##'   \item{\code{verified}}{Logical. \code{TRUE} if it is a verified Google+ 
 ##'                          profile.}
+##'   \item{\code{website}}{A URL listed in the profile.}
 ##'   \item{\code{ageMin, ageMax}}{Google+ provides only age ranges for some
 ##'                                profiles. This will contain the lower and
 ##'                               upper bound of the age range of the user.}
@@ -158,11 +159,23 @@ harvestProfile <- function(id) {
                      close.people,
                      get("apikey", envir=gp))
   this.res <- fromJSON(getURL(this.url), asText=TRUE)
+  urls <- this.res$urls
+  if (is.null(urls)) {
+    ws <- NA
+  } else {
+    ut <- sapply(urls, function(x) x["type"]) == "website"
+    if (any(ut)) {
+      ws <- urls[ut][[1]]["value"]
+    } else {
+      ws <- NA
+    }
+  }
   this.ext <- list(id=this.res$id,
                    sex=this.res$gender,
                    ln=this.res$name[1],
                    fn=this.res$name[2],
                    verified=this.res$verified,
+                   website=ws,
                    ageMin=this.res$ageRange[2],
                    ageMax=this.res$ageRange[1],
                    bday=this.res$birthday,
@@ -173,7 +186,7 @@ harvestProfile <- function(id) {
                    relationship=this.res$relationshipStatus,
                    bio=this.res$aboutMe,
                    tagline=this.res$tagline,
-                   type=this.res$type,
+                   type=this.res$objectType,
                    brag=this.res$braggingRights,
                    occ=this.res$occupation,
                    skills=this.res$skills)
