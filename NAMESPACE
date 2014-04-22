@@ -1,6 +1,7 @@
 export(harvestActivity)
 export(harvestPage)
 export(harvestProfile)
+export(parseAttachments)
 export(parsePost)
 export(searchPost)
 export(searchProfile)

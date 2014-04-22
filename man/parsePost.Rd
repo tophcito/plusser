@@ -29,8 +29,9 @@ days.} \item{\code{id}}{The post's unique Google+ post ID.}
 attracted so far.} \item{\code{nP}}{The number of +1s the
 post has attracted so far.} \item{\code{nR}}{The number of
 times the post has been reshared so far.}
-\item{\code{nA}}{The number of attachments (URLs, images,
-...) to the post} \item{\code{msg}}{The post's content.} }
+\item{\code{at}}{The type of attachment (article, photo,
+...) as reported by the API} \item{\code{msg}}{The post's
+content.} }
 }
 \examples{
 \dontrun{
