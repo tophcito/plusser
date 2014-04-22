@@ -3,7 +3,8 @@
 base.url <- "https://www.googleapis.com/plus/v1/"
 
 start.people <- "people/"
-close.page <- "/activities/public?maxResults=100&key="
+close.page1 <- "/activities/public?maxResults=100"
+close.page2 <- "&key="
 
 close.people <- "?key="
 
