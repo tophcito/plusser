@@ -41,7 +41,9 @@ harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1)
   url <- paste0(base.url,
                 start.people,
                 curlEscape(user),
-                close.page,
+                close.page1,
+                nextToken,
+                close.page2,
                 get("apikey", envir=gp))
   this.res <- fromJSON(getURL(url), asText=TRUE)
   res <- this.res[["items"]]
