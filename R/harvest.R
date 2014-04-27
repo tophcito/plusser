@@ -4,8 +4,14 @@
 ##' page. Google calls this `listing activities`.
 ##' 
 ##' The result is either a simple list of items from the page that can be parsed
-##' using \code{\link{parsePost}} or a data frame with that function already
-##' applied.
+##' using e.g. \code{\link{parsePost}} or a data frame with that (or another 
+##' user-supplied) function already applied.
+##' 
+##' When writing your own parsing functions, make sure that the function takes a
+##' single list item from the raw list as its argument and returns a vector of
+##' values or a one-row data frame. The return values of the function are then
+##' fed into \code{plyr}'s \code{ldply} to turn it into a data frame. See
+##' \code{\link{parsePost}} for an example.
 ##' 
 ##' The length of the list or the number of rows of the data frame are somewhat 
 ##' ambiguous. Specifying the \code{results} argument will try to get that many
@@ -16,15 +22,15 @@
 ##' results.
 ##' 
 ##' @param user A user identification string: either user ID or +Name.
-##' @param ret A string specifying the kind of return value. Either a 
-##'   \code{list} of the retrieved items on the page, or that list parsed into a
-##'   \code{data.frame}.
+##' @param parseFun A function for parsing the results, e.g. the supplied 
+##'   \code{\link{parsePost}} function. If set to \code{NULL}, then the raw list
+##'   of the retrieved posts is being returned. Defaults to \code{parsePost}.
 ##' @param results The approximate number of results that will be retrieved from
 ##'   Google+.
 ##' @param nextToken,cr used internally to retrieve additional pages of
 ##'   answers from the Google+ API. Users won't need to set these arguments.
-##' @return The function returns a list or a data frame. See \code{Details} for
-##'   more on its content.
+##' @return The function returns either the raw list of retrieved posts or
+##'   whatever the supplied parsing function does with the retrieved list.
 ##' @export
 ##' @seealso Google+ API documentation:
 ##'   \url{https://developers.google.com/+/api/latest/activities/list}.
@@ -34,10 +40,9 @@
 ##' myPosts.df <- harvestPage("115046504166916768425")
 ##' gPosts.df <- harvestPage("+google", results=200)
 ##' }
-harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1) {
+harvestPage <- function(user, parseFun=parsePost, results=1, nextToken=NULL, cr=1) {
   if (is.null(get("apikey", envir=gp))) stop("Set the Google+ API key first using setAPIkey().")
   if (results < 1) stop("Argument 'results' needs be positive.")
-  if (ret != "data.frame" & ret != "list") stop("Argument 'ret' must be either 'data.frame' or 'list'")
   url <- paste0(base.url,
                 start.people,
                 curlEscape(user),
@@ -50,12 +55,12 @@ harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1)
   cr <- cr + length(res)
   if(!is.null(this.res[["nextPageToken"]]) & cr < results) {
     this.nextToken <- paste0("&pageToken=", this.res[["nextPageToken"]])
-    res <- c(res, harvestPage(user, "list", results, this.nextToken, cr))
+    res <- c(res, harvestPage(user, NULL, results, this.nextToken, cr))
   }
-  if (ret=="list") {
+  if (is.null(parseFun)) {
     return(res)
   } else {
-    res <- ldply(res, parsePost)
+    res <- ldply(res, parseFun)
     return(res)
   }
 }
@@ -107,41 +112,19 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##' Retrieve the profile of Google+ users
 ##'
 ##' This function retrieves the profile of one or more Google+ user(s). Google
-##' calls this `get people`. The results are returned in a data frame. See 
-##' \code{Details}.
-##'
-##' The following fields will be filled with data (if available) or \code{NA}
-##' otherwise:
-##' \describe{
-##'   \item{\code{id}}{The Google+ user ID.}
-##'   \item{\code{sex}}{The user's gender: \code{male}, \code{female}, or 
-##'                     \code{other}.}
-##'   \item{\code{ln}}{The user's last name.}
-##'   \item{\code{fn}}{The user's first name.}
-##'   \item{\code{verified}}{Logical. \code{TRUE} if it is a verified Google+ 
-##'                          profile.}
-##'   \item{\code{website}}{A URL listed in the profile.}
-##'   \item{\code{ageMin, ageMax}}{Google+ provides only age ranges for some
-##'                                profiles. This will contain the lower and
-##'                               upper bound of the age range of the user.}
-##'   \item{\code{bday}}{The birthday of the user (YYYY-MM-DD).}
-##'   \item{\code{nCircled}}{The number of Persons the user circled by.}
-##'   \item{\code{currentLoc}}{The user's current location.}
-##'   \item{\code{lang}}{The primary language the user reported.}
-##'   \item{\code{p1count}}{The number of +1s the user awarded.}
-##'   \item{\code{relationship}}{The user's relationship status.}
-##'   \item{\code{bio}}{The `About Me' short autobiography.}
-##'   \item{\code{tagline}}{The tagline of a profile.}
-##'   \item{\code{type}}{The type of a profile: \code{person} or \code{page}.}
-##'   \item{\code{brag}}{The `bragging rights' section of the profile.}
-##'   \item{\code{occ}}{The person's occupation.}
-##'   \item{\code{skills}}{The person's skills.}
-##'   }
+##' calls this `get people`. The results are either returned as a raw list with 
+##' one element per profile or parsed using a parsing function, either the 
+##' prepackaged one \code{\link{parseProfile}} or a user-supplied one.
+##' 
+##' When using your own parsing function, be sure that it takes a single element
+##' from the returned list and returns either a vector of values or a single row
+##' data frame.
 ##'
 ##' @param id A character vector of the Google+ user ID(s).
-##' @return The function returns a data frame with all available 
-##'   information with one row per user ID. See \code{Details} for a description
-##'   of its columns.
+##' @param parseFun the function used to parse the results. If \code{NULL} the
+##' raw list of results is returned.
+##' @return The function returns either a raw list or a parsed version. 
+##' See \code{Details}.
 ##' @seealso Google+ API documentation:
 ##'   \url{https://developers.google.com/+/api/latest/people/get}
 ##' @export
@@ -149,52 +132,20 @@ harvestActivity <- function(activity, kind=c("plusoners", "resharers"),
 ##' \dontrun{
 ##' gProfile <- harvestProfile("+google")
 ##' }
-harvestProfile <- function(id) {
+harvestProfile <- function(id, parseFun=parseProfile) {
   if (is.null(get("apikey", envir=gp))) stop("Set the Google+ API key first using setAPIkey().")
-  if (length(id)>1) {
-    res <- ldply(as.list(id), harvestProfile)
-    return(res)
+  this.res <- lapply(as.list(id), function(x) {
+    u <- paste0(base.url,
+               start.people,
+               curlEscape(x),
+               close.people,
+               get("apikey", envir=gp))
+    r <- fromJSON(getURL(u), asText=TRUE)
+    return(r)
+  })
+  if (is.null(parseFun)) {
+    return(this.res)
   } else {
-  this.url <- paste0(base.url,
-                     start.people,
-                     curlEscape(id),
-                     close.people,
-                     get("apikey", envir=gp))
-  this.res <- fromJSON(getURL(this.url), asText=TRUE)
-  urls <- this.res$urls
-  if (is.null(urls)) {
-    ws <- NA
-  } else {
-    ut <- sapply(urls, function(x) x["type"]) == "website"
-    if (any(ut)) {
-      ws <- urls[ut][[1]]["value"]
-    } else {
-      ws <- NA
-    }
-  }
-  this.ext <- list(id=this.res$id,
-                   sex=this.res$gender,
-                   ln=this.res$name[1],
-                   fn=this.res$name[2],
-                   verified=this.res$verified,
-                   website=ws,
-                   ageMin=this.res$ageRange[2],
-                   ageMax=this.res$ageRange[1],
-                   bday=this.res$birthday,
-                   nCircled=this.res$circledByCount,
-                   currentLoc=this.res$currentLocation,
-                   lang=this.res$language,
-                   p1count=this.res$plusOneCount,
-                   relationship=this.res$relationshipStatus,
-                   bio=this.res$aboutMe,
-                   tagline=this.res$tagline,
-                   type=this.res$objectType,
-                   brag=this.res$braggingRights,
-                   occ=this.res$occupation,
-                   skills=this.res$skills)
-  this.ext[sapply(this.ext, is.null)] <- NA
-  this.ext <- as.data.frame(this.ext, stringsAsFactors=FALSE)
-  rownames(this.ext) <- NULL
-  return(this.ext)
+    return(ldply(this.res, parseFun))  
   }
 }
