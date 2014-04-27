@@ -22,6 +22,10 @@ retrieve posts, a post's popularity (comments, +1s,
 reshares) and the profiles of entities. Espescially
 interesting might be the retrieval of profiles that
 interacted with certain posts.
+
+This package is designed as modular as possible with
+separating harvest and parsing functions. Users can use
+their own parsing functions if required.
 }
 \section{Google+ API Key}{
   This section describes briefly how to obtain a Google+
