@@ -2,16 +2,17 @@
 \alias{harvestPage}
 \title{Retrieve the posts of a user's G+ page}
 \usage{
-harvestPage(user, ret = "data.frame", results = 1, nextToken = NULL,
+harvestPage(user, parseFun = parsePost, results = 1, nextToken = NULL,
   cr = 1)
 }
 \arguments{
   \item{user}{A user identification string: either user ID
   or +Name.}
 
-  \item{ret}{A string specifying the kind of return value.
-  Either a \code{list} of the retrieved items on the page,
-  or that list parsed into a \code{data.frame}.}
+  \item{parseFun}{A function for parsing the results, e.g.
+  the supplied \code{\link{parsePost}} function. If set to
+  \code{NULL}, then the raw list of the retrieved posts is
+  being returned. Defaults to \code{parsePost}.}
 
   \item{results}{The approximate number of results that
   will be retrieved from Google+.}
@@ -21,8 +22,9 @@ harvestPage(user, ret = "data.frame", results = 1, nextToken = NULL,
   won't need to set these arguments.}
 }
 \value{
-The function returns a list or a data frame. See
-\code{Details} for more on its content.
+The function returns either the raw list of retrieved posts
+or whatever the supplied parsing function does with the
+retrieved list.
 }
 \description{
 This function retrieves the most recent posts that a user
@@ -30,8 +32,16 @@ put on her page. Google calls this `listing activities`.
 }
 \details{
 The result is either a simple list of items from the page
-that can be parsed using \code{\link{parsePost}} or a data
-frame with that function already applied.
+that can be parsed using e.g. \code{\link{parsePost}} or a
+data frame with that (or another user-supplied) function
+already applied.
+
+When writing your own parsing functions, make sure that the
+function takes a single list item from the raw list as its
+argument and returns a vector of values or a one-row data
+frame. The return values of the function are then fed into
+\code{plyr}'s \code{ldply} to turn it into a data frame.
+See \code{\link{parsePost}} for an example.
 
 The length of the list or the number of rows of the data
 frame are somewhat ambiguous. Specifying the \code{results}

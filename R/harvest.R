@@ -4,8 +4,14 @@
 ##' page. Google calls this `listing activities`.
 ##' 
 ##' The result is either a simple list of items from the page that can be parsed
-##' using \code{\link{parsePost}} or a data frame with that function already
-##' applied.
+##' using e.g. \code{\link{parsePost}} or a data frame with that (or another 
+##' user-supplied) function already applied.
+##' 
+##' When writing your own parsing functions, make sure that the function takes a
+##' single list item from the raw list as its argument and returns a vector of
+##' values or a one-row data frame. The return values of the function are then
+##' fed into \code{plyr}'s \code{ldply} to turn it into a data frame. See
+##' \code{\link{parsePost}} for an example.
 ##' 
 ##' The length of the list or the number of rows of the data frame are somewhat 
 ##' ambiguous. Specifying the \code{results} argument will try to get that many
@@ -16,15 +22,15 @@
 ##' results.
 ##' 
 ##' @param user A user identification string: either user ID or +Name.
-##' @param ret A string specifying the kind of return value. Either a 
-##'   \code{list} of the retrieved items on the page, or that list parsed into a
-##'   \code{data.frame}.
+##' @param parseFun A function for parsing the results, e.g. the supplied 
+##'   \code{\link{parsePost}} function. If set to \code{NULL}, then the raw list
+##'   of the retrieved posts is being returned. Defaults to \code{parsePost}.
 ##' @param results The approximate number of results that will be retrieved from
 ##'   Google+.
 ##' @param nextToken,cr used internally to retrieve additional pages of
 ##'   answers from the Google+ API. Users won't need to set these arguments.
-##' @return The function returns a list or a data frame. See \code{Details} for
-##'   more on its content.
+##' @return The function returns either the raw list of retrieved posts or
+##'   whatever the supplied parsing function does with the retrieved list.
 ##' @export
 ##' @seealso Google+ API documentation:
 ##'   \url{https://developers.google.com/+/api/latest/activities/list}.
@@ -34,10 +40,9 @@
 ##' myPosts.df <- harvestPage("115046504166916768425")
 ##' gPosts.df <- harvestPage("+google", results=200)
 ##' }
-harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1) {
+harvestPage <- function(user, parseFun=parsePost, results=1, nextToken=NULL, cr=1) {
   if (is.null(get("apikey", envir=gp))) stop("Set the Google+ API key first using setAPIkey().")
   if (results < 1) stop("Argument 'results' needs be positive.")
-  if (ret != "data.frame" & ret != "list") stop("Argument 'ret' must be either 'data.frame' or 'list'")
   url <- paste0(base.url,
                 start.people,
                 curlEscape(user),
@@ -50,12 +55,12 @@ harvestPage <- function(user, ret="data.frame", results=1, nextToken=NULL, cr=1)
   cr <- cr + length(res)
   if(!is.null(this.res[["nextPageToken"]]) & cr < results) {
     this.nextToken <- paste0("&pageToken=", this.res[["nextPageToken"]])
-    res <- c(res, harvestPage(user, "list", results, this.nextToken, cr))
+    res <- c(res, harvestPage(user, NULL, results, this.nextToken, cr))
   }
-  if (ret=="list") {
+  if (is.null(parseFun)) {
     return(res)
   } else {
-    res <- ldply(res, parsePost)
+    res <- ldply(res, parseFun)
     return(res)
   }
 }
