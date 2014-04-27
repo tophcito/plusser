@@ -1,3 +1,18 @@
+Changes in version 0.4-0 (2014-04-27)
+
+New Features
+* parseAttachment() can be used to extract the attachments from posts.
+  Dependent on the type of attachment, different fields are being extracted.
+  Owing to its modular design, it is possible to extend the parsing of future attachment types.
+* harvestPage() and harvestProfile() now use pluggable parsing functions. All
+  parsing code has been put into external functions like parsePost() and parseProfile().
+  The harvest*() functions can be called with these or user-contributed parsing functions.
+  Thanks go to Bud Gibson for the idea.
+
+Improvements
+* parsePost() is not returning the number of attachments (nA) anymore, as it was always 0 or 1.
+  Rather, it now returns the type of attachment a post has (or NA, if there is no attachment).
+
 Changes in version 0.3-6 (2014-04-22)
 
 Bugfixes
