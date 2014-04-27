@@ -1,6 +1,6 @@
 Package: plusser
-Date: 2014-02-28
-Version: 0.3-6
+Date: 2014-04-27
+Version: 0.4-0
 Title: A Google+ Interface for R
 Description: plusser provides an API interface to Google+ so that posts,
     profiles and pages can be automatically retrieved
